@@ -47,12 +47,10 @@ interface OnboardingScreenProps {
 export const OnboardingScreen: React.FC<OnboardingScreenProps> = ({ navigation }) => {
   /**
    * Handle "Get Started" button press
-   * Navigates to the main app (Dashboard)
+   * Navigates to the login screen
    */
   const handleGetStarted = () => {
-    // In a real app, this would set a flag in AsyncStorage
-    // to indicate onboarding is complete
-    navigation.replace('Dashboard');
+    navigation.replace('Login');
   };
   
   /**

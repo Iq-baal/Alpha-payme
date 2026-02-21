@@ -58,6 +58,14 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ navigation }) 
   const recentTransactions = getRecentTransactions(5);
   
   /**
+   * Handle logout
+   */
+  const handleLogout = async () => {
+    await haptics.medium();
+    navigation.replace('Login');
+  };
+  
+  /**
    * Handle transaction row press
    * Navigates to transaction detail screen with light haptic feedback
    * 
@@ -135,6 +143,17 @@ export const DashboardScreen: React.FC<DashboardScreenProps> = ({ navigation }) 
               title="Settings"
               icon="⚙"
               onPress={() => navigation.navigate('Settings')}
+            />
+          </View>
+        </Section>
+        
+        {/* Account Section */}
+        <Section title="Account">
+          <View style={styles.actionList}>
+            <ActionRow
+              title="Log Out"
+              icon="👋"
+              onPress={handleLogout}
             />
           </View>
         </Section>

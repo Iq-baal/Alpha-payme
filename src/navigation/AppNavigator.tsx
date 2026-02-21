@@ -7,6 +7,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Screen imports
 import { DashboardScreen } from '../screens/DashboardScreen';
 import { OnboardingScreen } from '../screens/OnboardingScreen';
+import { WelcomeScreen } from '../screens/WelcomeScreen';
+import { LoginScreen } from '../screens/LoginScreen';
+import { SignUpScreen } from '../screens/SignUpScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { TransactionDetailScreen } from '../screens/TransactionDetailScreen';
 
@@ -14,6 +17,9 @@ import { TransactionDetailScreen } from '../screens/TransactionDetailScreen';
 export type RootStackParamList = {
   Dashboard: undefined;
   Onboarding: undefined;
+  Welcome: undefined;
+  Login: undefined;
+  SignUp: undefined;
   Settings: undefined;
   TransactionDetail: { transactionId: string };
 };
@@ -95,14 +101,40 @@ const AppNavigator: React.FC = () => {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={navigationOptions}
-        initialRouteName={isFirstLaunch ? 'Onboarding' : 'Dashboard'}
+        initialRouteName="Welcome"
       >
+        {/* Welcome Screen - first screen */}
+        <Stack.Screen
+          name="Welcome"
+          component={WelcomeScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        
         {/* Onboarding Screen - shown only on first launch */}
         <Stack.Screen
           name="Onboarding"
           component={OnboardingScreen}
           options={{
             headerShown: false, // No header for onboarding
+          }}
+        />
+        
+        {/* Auth Screens */}
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{
+            headerShown: false, // No header for login
+          }}
+        />
+        
+        <Stack.Screen
+          name="SignUp"
+          component={SignUpScreen}
+          options={{
+            headerShown: false, // No header for sign up
           }}
         />
         
