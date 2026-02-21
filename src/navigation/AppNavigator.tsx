@@ -1,22 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Screen imports
-import { DashboardScreen } from '../screens/DashboardScreen';
-import { OnboardingScreen } from '../screens/OnboardingScreen';
+import { HomeScreen } from '../screens/HomeScreen';
+import { AccountScreen } from '../screens/AccountScreen';
 import { WelcomeScreen } from '../screens/WelcomeScreen';
 import { LoginScreen } from '../screens/LoginScreen';
 import { SignUpScreen } from '../screens/SignUpScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { TransactionDetailScreen } from '../screens/TransactionDetailScreen';
+import { Typography } from '../components/design-system';
+import { colors } from '../theme/colors';
 
 // Define navigation types
 export type RootStackParamList = {
-  Dashboard: undefined;
-  Onboarding: undefined;
+  MainTabs: undefined;
   Welcome: undefined;
   Login: undefined;
   SignUp: undefined;
@@ -24,7 +26,13 @@ export type RootStackParamList = {
   TransactionDetail: { transactionId: string };
 };
 
+export type TabParamList = {
+  Home: undefined;
+  Account: undefined;
+};
+
 const Stack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<TabParamList>();
 
 /**
  * iOS-native navigation configuration
@@ -61,6 +69,57 @@ const navigationOptions = {
   // iOS-native gesture handling on all platforms
   gestureEnabled: true,
   fullScreenGestureEnabled: true,
+};
+
+/**
+ * Main Tab Navigator (Venmo-style)
+ */
+const MainTabs = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: colors.systemBlue,
+        tabBarInactiveTintColor: colors.systemGray,
+        tabBarStyle: {
+          backgroundColor: colors.secondarySystemGroupedBackground,
+          borderTopColor: colors.separator,
+          paddingTop: 8,
+          paddingBottom: 8,
+          height: 60,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '600',
+        },
+        headerShown: false,
+      }}
+    >
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: 'Feed',
+          tabBarIcon: ({ color, size }) => (
+            <Typography variant="title2" style={{ color, fontSize: size }}>
+              📱
+            </Typography>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Account"
+        component={AccountScreen}
+        options={{
+          tabBarLabel: 'Me',
+          tabBarIcon: ({ color, size }) => (
+            <Typography variant="title2" style={{ color, fontSize: size }}>
+              👤
+            </Typography>
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
 };
 
 const AppNavigator: React.FC = () => {
@@ -112,21 +171,12 @@ const AppNavigator: React.FC = () => {
           }}
         />
         
-        {/* Onboarding Screen - shown only on first launch */}
-        <Stack.Screen
-          name="Onboarding"
-          component={OnboardingScreen}
-          options={{
-            headerShown: false, // No header for onboarding
-          }}
-        />
-        
         {/* Auth Screens */}
         <Stack.Screen
           name="Login"
           component={LoginScreen}
           options={{
-            headerShown: false, // No header for login
+            headerShown: false,
           }}
         />
         
@@ -134,17 +184,16 @@ const AppNavigator: React.FC = () => {
           name="SignUp"
           component={SignUpScreen}
           options={{
-            headerShown: false, // No header for sign up
+            headerShown: false,
           }}
         />
         
-        {/* Dashboard Screen - main app screen */}
+        {/* Main App with Tabs */}
         <Stack.Screen
-          name="Dashboard"
-          component={DashboardScreen}
+          name="MainTabs"
+          component={MainTabs}
           options={{
-            title: 'Dashboard',
-            headerLargeTitle: true,
+            headerShown: false,
           }}
         />
         
@@ -164,7 +213,7 @@ const AppNavigator: React.FC = () => {
           component={TransactionDetailScreen}
           options={{
             title: 'Transaction',
-            headerLargeTitle: false, // Standard header for detail screens
+            headerLargeTitle: false,
           }}
         />
       </Stack.Navigator>

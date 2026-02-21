@@ -61,7 +61,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     setTimeout(() => {
       setIsLoading(false);
       haptics.medium();
-      navigation.replace('Dashboard');
+      navigation.replace('MainTabs');
     }, 1000);
   };
 
@@ -81,7 +81,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
     if (result.success) {
       await haptics.heavy();
-      navigation.replace('Dashboard');
+      navigation.replace('MainTabs');
     } else if (result.error) {
       Alert.alert('Authentication Failed', result.error);
     }

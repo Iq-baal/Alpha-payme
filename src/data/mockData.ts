@@ -29,7 +29,7 @@ export interface UserProfile {
   email: string;
   
   /**
-   * Optional avatar URL
+   * Optional avatar URL or emoji
    */
   avatar?: string;
   
@@ -42,6 +42,11 @@ export interface UserProfile {
    * Currency code (e.g., 'USD', 'EUR')
    */
   currency: string;
+  
+  /**
+   * Username for social features
+   */
+  username?: string;
 }
 
 /**
@@ -53,6 +58,66 @@ export type TransactionType = 'sent' | 'received';
  * Transaction Status
  */
 export type TransactionStatus = 'completed' | 'pending' | 'failed';
+
+/**
+ * Social Feed Item Interface
+ * 
+ * Represents a public transaction in the social feed (Venmo-style)
+ */
+export interface FeedItem {
+  /**
+   * Unique feed item identifier
+   */
+  id: string;
+  
+  /**
+   * User who made the payment
+   */
+  fromUser: {
+    name: string;
+    avatar: string;
+    username: string;
+  };
+  
+  /**
+   * User who received the payment
+   */
+  toUser: {
+    name: string;
+    avatar: string;
+    username: string;
+  };
+  
+  /**
+   * Transaction amount (hidden for privacy)
+   */
+  amount?: number;
+  
+  /**
+   * Transaction note/description
+   */
+  note: string;
+  
+  /**
+   * Timestamp
+   */
+  timestamp: Date;
+  
+  /**
+   * Number of likes
+   */
+  likes: number;
+  
+  /**
+   * Whether current user liked this
+   */
+  isLiked: boolean;
+  
+  /**
+   * Number of comments
+   */
+  comments: number;
+}
 
 /**
  * Transaction Interface
@@ -86,9 +151,19 @@ export interface Transaction {
   recipient?: string;
   
   /**
+   * Recipient avatar
+   */
+  recipientAvatar?: string;
+  
+  /**
    * Sender name (for received transactions)
    */
   sender?: string;
+  
+  /**
+   * Sender avatar
+   */
+  senderAvatar?: string;
   
   /**
    * Transaction timestamp
@@ -142,9 +217,79 @@ export const mockUser: UserProfile = {
   id: '1',
   name: 'John Appleseed',
   email: 'john.appleseed@example.com',
+  username: '@john',
+  avatar: '👤',
   balance: 1234.56,
   currency: 'USD',
 };
+
+/**
+ * Mock Social Feed
+ * 
+ * Sample social feed items (Venmo-style public transactions)
+ */
+export const mockFeed: FeedItem[] = [
+  {
+    id: 'f1',
+    fromUser: { name: 'Sarah Chen', avatar: '👩', username: '@sarah' },
+    toUser: { name: 'Mike Ross', avatar: '👨', username: '@mike' },
+    note: '🍕 Pizza night!',
+    timestamp: new Date(Date.now() - 1000 * 60 * 15), // 15 min ago
+    likes: 12,
+    isLiked: false,
+    comments: 3,
+  },
+  {
+    id: 'f2',
+    fromUser: { name: 'Alex Kim', avatar: '🧑', username: '@alex' },
+    toUser: { name: 'Emma Davis', avatar: '👩‍🦰', username: '@emma' },
+    note: '☕ Coffee run',
+    timestamp: new Date(Date.now() - 1000 * 60 * 45), // 45 min ago
+    likes: 8,
+    isLiked: true,
+    comments: 1,
+  },
+  {
+    id: 'f3',
+    fromUser: { name: 'David Lee', avatar: '👨‍💼', username: '@david' },
+    toUser: { name: 'Lisa Wang', avatar: '👩‍💻', username: '@lisa' },
+    note: '🎬 Movie tickets',
+    timestamp: new Date(Date.now() - 1000 * 60 * 120), // 2 hours ago
+    likes: 24,
+    isLiked: false,
+    comments: 5,
+  },
+  {
+    id: 'f4',
+    fromUser: { name: 'Rachel Green', avatar: '👱‍♀️', username: '@rachel' },
+    toUser: { name: 'Ross Geller', avatar: '👨‍🏫', username: '@ross' },
+    note: '🍜 Dinner split',
+    timestamp: new Date(Date.now() - 1000 * 60 * 180), // 3 hours ago
+    likes: 15,
+    isLiked: true,
+    comments: 2,
+  },
+  {
+    id: 'f5',
+    fromUser: { name: 'Tom Hardy', avatar: '🧔', username: '@tom' },
+    toUser: { name: 'Anna Bell', avatar: '👩‍🎨', username: '@anna' },
+    note: '🎸 Concert tickets',
+    timestamp: new Date(Date.now() - 1000 * 60 * 240), // 4 hours ago
+    likes: 31,
+    isLiked: false,
+    comments: 7,
+  },
+  {
+    id: 'f6',
+    fromUser: { name: 'Chris Evans', avatar: '🦸', username: '@chris' },
+    toUser: { name: 'Scarlett Jo', avatar: '👩‍🦱', username: '@scarlett' },
+    note: '🏋️ Gym membership',
+    timestamp: new Date(Date.now() - 1000 * 60 * 360), // 6 hours ago
+    likes: 19,
+    isLiked: false,
+    comments: 4,
+  },
+];
 
 /**
  * Mock Transactions
@@ -158,9 +303,10 @@ export const mockTransactions: Transaction[] = [
     amount: 50.00,
     currency: 'USD',
     sender: 'Jane Smith',
+    senderAvatar: '👩‍💼',
     timestamp: new Date('2024-01-15T10:30:00'),
     status: 'completed',
-    description: 'Coffee payment',
+    description: '☕ Coffee payment',
   },
   {
     id: '2',
@@ -168,9 +314,10 @@ export const mockTransactions: Transaction[] = [
     amount: 125.00,
     currency: 'USD',
     recipient: 'Bob Johnson',
+    recipientAvatar: '👨‍🍳',
     timestamp: new Date('2024-01-14T15:45:00'),
     status: 'completed',
-    description: 'Dinner split',
+    description: '🍽️ Dinner split',
   },
   {
     id: '3',
@@ -178,9 +325,10 @@ export const mockTransactions: Transaction[] = [
     amount: 200.00,
     currency: 'USD',
     sender: 'Alice Williams',
+    senderAvatar: '👩‍🎓',
     timestamp: new Date('2024-01-13T09:15:00'),
     status: 'completed',
-    description: 'Rent contribution',
+    description: '🏠 Rent contribution',
   },
   {
     id: '4',
@@ -188,9 +336,10 @@ export const mockTransactions: Transaction[] = [
     amount: 35.50,
     currency: 'USD',
     recipient: 'Charlie Brown',
+    recipientAvatar: '👦',
     timestamp: new Date('2024-01-12T18:20:00'),
     status: 'completed',
-    description: 'Movie tickets',
+    description: '🎬 Movie tickets',
   },
   {
     id: '5',
@@ -198,10 +347,12 @@ export const mockTransactions: Transaction[] = [
     amount: 75.00,
     currency: 'USD',
     sender: 'David Lee',
+    senderAvatar: '👨‍💻',
     timestamp: new Date('2024-01-11T12:00:00'),
     status: 'completed',
-    description: 'Freelance work',
+    description: '💼 Freelance work',
   },
+];
   {
     id: '6',
     type: 'sent',
@@ -376,4 +527,25 @@ export const formatTime = (date: Date): string => {
     minute: '2-digit',
     hour12: true,
   }).format(date);
+};
+
+/**
+ * Helper function to get relative time string (Venmo-style)
+ * 
+ * @param date - Date to format
+ * @returns Relative time string (e.g., "2m ago", "3h ago")
+ */
+export const getRelativeTime = (date: Date): string => {
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  
+  if (diffMins < 1) return 'Just now';
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
+  
+  return formatDate(date);
 };

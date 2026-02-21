@@ -105,7 +105,7 @@ export const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
         [
           {
             text: 'OK',
-            onPress: () => navigation.replace('Dashboard'),
+            onPress: () => navigation.replace('MainTabs'),
           },
         ]
       );
