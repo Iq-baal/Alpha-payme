@@ -61,7 +61,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     setTimeout(() => {
       setIsLoading(false);
       haptics.medium();
-      navigation.replace('MainTabs');
+      navigation.replace('SecureOnboarding');
     }, 1000);
   };
 
@@ -81,7 +81,7 @@ export const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
     if (result.success) {
       await haptics.heavy();
-      navigation.replace('MainTabs');
+      navigation.replace('SecureOnboarding');
     } else if (result.error) {
       Alert.alert('Authentication Failed', result.error);
     }

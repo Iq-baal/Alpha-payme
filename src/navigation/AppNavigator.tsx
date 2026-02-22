@@ -13,6 +13,8 @@ import { LoginScreen } from '../screens/LoginScreen';
 import { SignUpScreen } from '../screens/SignUpScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { TransactionDetailScreen } from '../screens/TransactionDetailScreen';
+import { SecureOnboardingScreen } from '../screens/SecureOnboardingScreen';
+import { DashboardScreen } from '../screens/DashboardScreen';
 import { Typography } from '../components/design-system';
 import { colors } from '../theme/colors';
 
@@ -22,6 +24,8 @@ export type RootStackParamList = {
   Welcome: undefined;
   Login: undefined;
   SignUp: undefined;
+  SecureOnboarding: undefined;
+  Dashboard: undefined;
   Settings: undefined;
   TransactionDetail: { transactionId: string };
 };
@@ -185,6 +189,25 @@ const AppNavigator: React.FC = () => {
           component={SignUpScreen}
           options={{
             headerShown: false,
+          }}
+        />
+        
+        {/* Secure Onboarding Flow */}
+        <Stack.Screen
+          name="SecureOnboarding"
+          component={SecureOnboardingScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        
+        {/* Dashboard Screen */}
+        <Stack.Screen
+          name="Dashboard"
+          component={DashboardScreen}
+          options={{
+            title: 'Dashboard',
+            headerLargeTitle: true,
           }}
         />
         

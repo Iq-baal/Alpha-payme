@@ -13,6 +13,8 @@ export const colors = {
   // iOS System Colors
   systemBlue: '#007AFF',
   systemRed: '#FF3B30',
+  systemGreen: '#34C759',
+  systemOrange: '#FF9500',
   systemGray: '#8E8E93',
   
   // Background Colors
